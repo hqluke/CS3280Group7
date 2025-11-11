@@ -1,0 +1,42 @@
+﻿<Window x:Class="GroupProject.Main.wndMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GroupProject.Main"
+        mc:Ignorable="d"
+        Title="Main Window" Height="450" Width="800">
+    <Canvas>
+        <Menu Height="33" Width="159" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Content="Edit Items" Margin="0" Click="menuEditItemsClicked"/>
+            <Button Content="Search" Margin="0" Click="menuSearchClicked"/>
+        </Menu>
+        <Canvas>
+            <DataGrid AutoGenerateColumns="False" Height="304" Width="433" Name="dgInvoice" Canvas.Left="309" Canvas.Top="28" HorizontalAlignment="Center" VerticalAlignment="Top" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="70" Header="Item Code" Binding="{Binding Path = Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="240" Header="Description" Binding="{Binding Path = Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="125" Header="Cost" Binding="{Binding Path = Cost}"></DataGridTextColumn>
+                </DataGrid.Columns>
+                
+                
+            </DataGrid>
+        </Canvas>
+        <Label x:Name="labelInvoiceDate" Content="Invoice Date" Canvas.Left="61" Canvas.Top="71" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label x:Name="labelInvoiceNumber" Content="Invoice Number" Canvas.Left="61" Canvas.Top="126" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label x:Name="labelInvoiceTotalCost" Content="Total Cost:" Canvas.Left="68" Canvas.Top="174" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBoxItems" Canvas.Left="84" Canvas.Top="270" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="labelItems" Content="Items:" Canvas.Left="26" Canvas.Top="268" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="labelItemCost" Content="Cost: " Canvas.Left="28" Canvas.Top="312" RenderTransformOrigin="0.202,-0.153" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="labelItemCostDisplay" Content="$" Canvas.Left="84" Canvas.Top="312" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="labelInvoiceTotalCostDisplay" Content="$" Canvas.Left="143" Canvas.Top="174" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label x:Name="labelInvoiceNumberDisplay" Content="$" Canvas.Left="172" Canvas.Top="126" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label x:Name="labelInvoiceDateDisplay" Content="$" Canvas.Left="172" Canvas.Top="71" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Button x:Name="buttonAddItem" Content="Add Item" Canvas.Left="31" Canvas.Top="356" Width="74" Click="buttonAddItem_Click"/>
+        <Button x:Name="buttonRemoveItem" Content="Remove Item" Canvas.Left="130" Canvas.Top="356" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="buttonRemoveItem_Click"/>
+        <Button x:Name="buttonEditInvoice" Content="Edit Invoice" Canvas.Left="308" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.432,0.202" Height="24"/>
+        <Button x:Name="buttonSaveInvoice" Content="Save Invoice" Canvas.Left="463" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24"/>
+        <Button x:Name="buttonCreateNewInvoice" Content="Create New Invoice" Canvas.Left="608" Canvas.Top="352" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" RenderTransformOrigin="0.333,0.403" Height="24"/>
+
+    </Canvas>
+</Window>
