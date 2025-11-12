@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Common
 {
-    class clsInvoice : INotifyPropertyChanged
+    public class clsInvoice : INotifyPropertyChanged
     {
         /// <summary>
         /// Holds the invoice number

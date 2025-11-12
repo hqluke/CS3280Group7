@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Common
 {
-    class clsItem : INotifyPropertyChanged
+    public class clsItem : INotifyPropertyChanged
     {
         /// <summary>
         /// Item code. Max length of 4 characters.

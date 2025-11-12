@@ -5,8 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GroupProject.Search"
         mc:Ignorable="d"
-        Title="windowSearch" Height="450" Width="800">
-    <Grid>
-        
+        Title="Search Invoices" Height="450" Width="800">
+    <Grid Name="grdMain" Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Label Name="lblTitle" FontSize="24" Grid.Row="0" Grid.Column="0">Search Invoices</Label>
+        <Button Name="btnClear" Grid.Column="1" 
+                VerticalAlignment="Bottom" MinWidth="50"
+        >
+            Clear
+        </Button>
+        <StackPanel Name="splInvoiceNumber" Grid.Column="2" Margin="8,0,0,0">
+            <Label Name="lblInvoiceNumber">Invoice Number</Label>
+            <ComboBox Name="cbxInvoiceNumber"></ComboBox>
+        </StackPanel>
+        <StackPanel Name="splInvoiceDate" Grid.Column="3" Margin="8,0,0,0">
+            <Label Name="lblInvoiceDate">Invoice Date</Label>
+            <ComboBox Name="cbxInvoiceDate"></ComboBox>
+        </StackPanel>
+        <StackPanel Name="splInvoiceTotalCost" Grid.Column="4" Margin="8,0,0,0">
+            <Label Name="lblInvoiceTotalCost">Total Cost</Label>
+            <ComboBox Name="cbxInvoiceTotalCost" Grid.Column="3"></ComboBox>
+        </StackPanel>
+        <DataGrid x:Name="dgdInvoices" Grid.Column="0" Grid.ColumnSpan="5"
+                  Grid.Row="1" HeadersVisibility="Column" Margin="0,8,0,0"
+            SelectionMode="Single" IsReadOnly="True"
+            AutoGenerateColumns="False" SelectionChanged="dgdInvoices_SelectionChanged"
+        >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Number"
+                    Binding="{Binding InvoiceNumber}" Width="*"/>
+                <DataGridTextColumn Header="Date"
+                    Binding="{Binding InvoiceDate}" Width="*"/>
+                <DataGridTextColumn Header="Total Cost"
+                    Binding="{Binding TotalCost}" Width="*"/>
+            </DataGrid.Columns> 
+        </DataGrid>
+        <Button x:Name="btnSelect" Grid.Column="3" Grid.Row="2" Margin="8"
+                VerticalAlignment="Center" Click="btnSelect_Click"
+                IsEnabled="False"
+        >
+            Select Invoice
+        </Button>
+        <Button Name="btnCancel" IsCancel="True" Grid.Column="4" Grid.Row="2"
+                 VerticalAlignment="Center" Margin="8"
+        >
+            Cancel
+        </Button>
     </Grid>
 </Window>
