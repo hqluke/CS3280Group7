@@ -8,5 +8,64 @@ namespace GroupProject.Items
 {
     class clsItemsSQL
     {
+        /// <summary>
+        /// Gets all items from ItemDesc table
+        /// </summary>
+        /// <returns>SQL statement</returns>
+        public string SelectAllItems()
+        {
+            string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            return sSQL;
+        }
+
+        /// <summary>
+        /// Gets all invoices containing specific item
+        /// </summary>
+        /// <param name="sItemCode">Item code</param>
+        /// <returns>SQL statement</returns>
+        public string SelectInvoicesWithItem(string sItemCode)
+        {
+            string sSQL = "SELECT DISTINCT(InvoiceNum) FROM LineItems WHERE ItemCode = '" + sItemCode + "'";
+            return sSQL;
+        }
+
+        /// <summary>
+        /// Updates existing item in ItemDesc table
+        /// </summary>
+        /// <param name="sItemCode">Item code</param>
+        /// <param name="sItemDesc">Item description</param>
+        /// <param name="sCost">New cost</param>
+        /// <returns>SQL statement</returns>
+        public string UpdateItem(string sItemCode, string sItemDesc, string sCost)
+        {
+            string sSQL = "UPDATE ItemDesc SET ItemDesc = '" + sItemDesc + "', Cost = " + sCost +
+                         " WHERE ItemCode = '" + sItemCode + "'";
+            return sSQL;
+        }
+
+        /// <summary>
+        /// Inserts new item into ItemDesc table
+        /// </summary>
+        /// <param name="sItemCode">Item code</param>
+        /// <param name="sItemDesc">Item description</param>
+        /// <param name="sCost">Item cost</param>
+        /// <returns>SQL statement</returns>
+        public string InsertItem(string sItemCode, string sItemDesc, string sCost)
+        {
+            string sSQL = "INSERT INTO ItemDesc (ItemCode, ItemDesc, Cost) VALUES ('" +
+                         sItemCode + "', '" + sItemDesc + "', " + sCost + ")";
+            return sSQL;
+        }
+
+        /// <summary>
+        /// Deletes item from ItemDesc table
+        /// </summary>
+        /// <param name="sItemCode">Item code</param>
+        /// <returns>SQL statement</returns>
+        public string DeleteItem(string sItemCode)
+        {
+            string sSQL = "DELETE FROM ItemDesc WHERE ItemCode = '" + sItemCode + "'";
+            return sSQL;
+        }
     }
 }
