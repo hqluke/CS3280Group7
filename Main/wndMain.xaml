@@ -25,7 +25,7 @@
         <Label x:Name="labelInvoiceDate" Content="Invoice Date" Canvas.Left="61" Canvas.Top="71" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Label x:Name="labelInvoiceNumber" Content="Invoice Number" Canvas.Left="61" Canvas.Top="126" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Label x:Name="labelInvoiceTotalCost" Content="Total Cost:" Canvas.Left="68" Canvas.Top="174" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBoxItems" Canvas.Left="84" Canvas.Top="270" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBoxItems" Canvas.Left="84" Canvas.Top="270" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="comboBoxItems_SelectionChanged"/>
         <Label x:Name="labelItems" Content="Items:" Canvas.Left="26" Canvas.Top="268" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="labelItemCost" Content="Cost: " Canvas.Left="28" Canvas.Top="312" RenderTransformOrigin="0.202,-0.153" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="labelItemCostDisplay" Content="$" Canvas.Left="84" Canvas.Top="312" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -34,7 +34,7 @@
         <Label x:Name="labelInvoiceDateDisplay" Content="$" Canvas.Left="172" Canvas.Top="71" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Button x:Name="buttonAddItem" Content="Add Item" Canvas.Left="31" Canvas.Top="356" Width="74" Click="buttonAddItem_Click"/>
         <Button x:Name="buttonRemoveItem" Content="Remove Item" Canvas.Left="130" Canvas.Top="356" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="buttonRemoveItem_Click"/>
-        <Button x:Name="buttonEditInvoice" Content="Edit Invoice" Canvas.Left="308" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.432,0.202" Height="24"/>
+        <Button x:Name="buttonEditInvoice" Content="Edit Invoice" Canvas.Left="308" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.432,0.202" Height="24" Click="buttonEditInvoice_Click"/>
         <Button x:Name="buttonSaveInvoice" Content="Save Invoice" Canvas.Left="463" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24"/>
         <Button x:Name="buttonCreateNewInvoice" Content="Create New Invoice" Canvas.Left="608" Canvas.Top="352" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" RenderTransformOrigin="0.333,0.403" Height="24"/>
 

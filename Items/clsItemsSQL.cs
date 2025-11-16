@@ -14,7 +14,7 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string SelectAllItems()
         {
-            string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc ORDER BY ItemCode";
             return sSQL;
         }
 

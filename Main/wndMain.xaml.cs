@@ -24,25 +24,29 @@ namespace GroupProject.Main
 
 
         clsInvoice currentInvoice;
-        ObservableCollection<clsItem> allAvailableItems;
+        List<clsItem> allAvailableItems;
         clsItem currentItem;
+        clsItemsLogic itemsLogic;
+        clsMainLogic mainLogic;
 
         public wndMain()
         {
             InitializeComponent();
-            //start();
+            itemsLogic = new clsItemsLogic();
+            mainLogic = new clsMainLogic();
+            start();
         }
 
         /// <summary>
         /// Binds the Item's comboBox to all the currently available items.
         /// </summary>
-        //private void start()
-        //{
+        private void start()
+        {
 
-        //    allAvailableItems = Items.clsItemsLogic.getAllItems();
-        //    comboBoxItems.ItemsSource = allAvailableItems;
-        //    comboBoxItems.DisplayMemberPath = "Description";
-        //}
+            allAvailableItems = itemsLogic.GetAllItems();
+            comboBoxItems.ItemsSource = allAvailableItems;
+            comboBoxItems.DisplayMemberPath = "Description";
+        }
 
         /// <summary>
         /// Creates a new wndItems window that handles all the Items in the data base.
@@ -54,25 +58,26 @@ namespace GroupProject.Main
             wndItems itemsWindow = new wndItems();
             itemsWindow.ShowDialog();
 
-        //if clsItemsLogic returns an ObservableCollection, shouldn't have to update allAvailableItems
-        //otherwise refresh the list after the window closes:
-        // allAvailableItems = clsItemsLogic.getAllItems();
-        // comboBoxItems.ItemsSource = allAvailableItems;
+            //if clsItemsLogic returns an ObservableCollection, shouldn't have to update allAvailableItems
+            //otherwise refresh the list after the window closes:
+            //allAvailableItems = itemsLogic.GetAllItems();
+            //comboBoxItems.ItemsSource = allAvailableItems;
 
-        //bool hasBeenChanged = itemsWindow.getHasBeenChanged();
+            //bool hasBeenChanged = itemsWindow.HasItemsBeenChanged;
 
-        //MOVE LOGIC TO MainLogic.cs\
+        //    MOVE LOGIC TO MainLogic.cs\
         //update the currentInvoice.ItemList if an item is removed from the collection
-        //if (hasbeenChanged == true) {
-        //for (int i = currentInvoice.ItemsList.Count - 1; i >= 0; i--)
-        //{
-        //    var item = currentInvoice.ItemsList[i];
-        //    if (!allAvailableItems.Contains(item))
-        //    {
-        //        currentInvoice.ItemsList.RemoveAt(i);
-        //    }
-        //}
-        //}
+            //if (hasBeenChanged == true)
+            //    {
+            //        for (int i = currentInvoice.ItemsList.Count - 1; i >= 0; i--)
+            //        {
+            //            var item = currentInvoice.ItemsList[i];
+            //            if (!allAvailableItems.Contains(item))
+            //            {
+            //                currentInvoice.ItemsList.RemoveAt(i);
+            //            }
+            //        }
+            //    }
         }
 
         ///<summary>
@@ -85,19 +90,38 @@ namespace GroupProject.Main
             wndSearch searchWindow = new wndSearch();
             searchWindow.ShowDialog();
 
-        //    clsInvoice newInvoice = searchWindow.getSelectedInvoice();
-        //    if (currentInvoice == searchWindow.getSelectedInvoice() || newInvoice == null)
-        //    {
-        //        return;
-        //    }
-        //    currentInvoice = newInvoice;
-        //    dgInvoice.ItemsSource = currentInvoice.ItemsList;
-        //    dgInvoice.IsReadOnly = false;
-        //    labelInvoiceNumberDisplay.Content = currentInvoice.InvoiceNumber.ToString();
-        //    labelInvoiceDateDisplay.Content = currentInvoice.InvoiceDate.ToString();
-        //    //example display: $70.00
-        //    labelInvoiceTotalCostDisplay.Content = "$" + currentInvoice.TotalCost.ToString("F2");
+            clsInvoice newInvoice = searchWindow.getSelectedInvoice();
+            if (currentInvoice == newInvoice || newInvoice == null)
+            {
 
+                return;
+            }
+
+            currentInvoice = newInvoice;
+
+            // Load the line items for this invoice
+            try
+            {
+                List<clsItem> invoiceItems = mainLogic.GetInvoiceItems(currentInvoice.InvoiceNumber);
+
+                // Clear existing items and add the loaded ones
+                currentInvoice.ItemsList.Clear();
+                foreach (clsItem item in invoiceItems)
+                {
+                    currentInvoice.AddItemToInvoice(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading invoice items: " + ex.Message, "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            dgInvoice.ItemsSource = currentInvoice.ItemsList;
+            dgInvoice.IsReadOnly = true;
+            labelInvoiceNumberDisplay.Content = currentInvoice.InvoiceNumber.ToString();
+            labelInvoiceDateDisplay.Content = currentInvoice.InvoiceDate.ToString();
+            labelInvoiceTotalCostDisplay.Content = "$" + currentInvoice.TotalCost.ToString("F2");
         }
 
         //MOVE LOGIC TO MainLogic.cs\
@@ -125,6 +149,17 @@ namespace GroupProject.Main
         //        currentInvoice.RemoveItemFromInvoice(itemToAdd);
 
         //    }
+        }
+
+        private void comboBoxItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            clsItem selectedItem = (clsItem)comboBoxItems.SelectedItem;
+            labelItemCostDisplay.Content = $"${selectedItem.Cost.ToString()}";
+        }
+
+        private void buttonEditInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            dgInvoice.IsReadOnly = false;
         }
     }
 }
