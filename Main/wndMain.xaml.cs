@@ -430,6 +430,16 @@ namespace GroupProject.Main
                 {
                     return;
                 }
+                string costString = labelInvoiceTotalCostDisplay.Content.ToString();
+                double newTotal = double.Parse(costString, System.Globalization.NumberStyles.Currency);
+
+                // Prevents adding item if it would exceed max currency value allowed by db
+                if (newTotal > MAX_CURRENCY)
+                {
+                    double difference = newTotal - MAX_CURRENCY;
+                    ShowError($"Please remove items to save invoice: Invoice total exceeds maximum allowed value by ${difference:N2}");
+                    return;
+                }
                 // If the invoice hasn't been created yet, create it in the database
                 if (!invoiceCreated)
                 {

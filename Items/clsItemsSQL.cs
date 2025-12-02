@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Items
 {
+    /// <summary>
+    /// Contains all SQL statements for Items Window
+    /// </summary>
     class clsItemsSQL
     {
         /// <summary>
@@ -65,6 +68,20 @@ namespace GroupProject.Items
         public string DeleteItem(string sItemCode)
         {
             string sSQL = "DELETE FROM ItemDesc WHERE ItemCode = '" + sItemCode + "'";
+            return sSQL;
+        }
+
+        /// <summary>
+        /// Gets all line items with costs for specific invoice
+        /// </summary>
+        /// <param name="invoiceNum">Invoice number</param>
+        /// <returns>SQL statement</returns>
+        public string SelectLineItemsForInvoice(int invoiceNum)
+        {
+            string sSQL = "SELECT I.ItemCode, I.Cost " +
+                          "FROM ItemDesc I " +
+                          "INNER JOIN LineItems L ON L.ItemCode = I.ItemCode " +
+                          "WHERE L.InvoiceNum = " + invoiceNum;
             return sSQL;
         }
     }

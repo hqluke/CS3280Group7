@@ -223,6 +223,12 @@ namespace GroupProject.Items
                     return;
                 }
 
+                if (txtCode.Text != selectedItem.Code)
+                {
+                    ShowWarning("Item does not exist.");
+                    return;
+                }
+
                 // Validate cost is numeric
                 if (!double.TryParse(txtCost.Text, out double cost))
                 {
@@ -234,6 +240,14 @@ namespace GroupProject.Items
                 if (txtDescription.Text.Trim().Length > 50)
                 {
                     ShowWarning("Item description cannot be longer than 50 characters.");
+                    return;
+                }
+
+                // Validate invoices
+                string validationError = itemsLogic.ValidateEditWontBreakInvoices(selectedItem.Code, cost, selectedItem.Cost);
+                if (!string.IsNullOrEmpty(validationError))
+                {
+                    ShowError(validationError);
                     return;
                 }
 
@@ -273,8 +287,28 @@ namespace GroupProject.Items
                     return;
                 }
 
+                if (txtCode.Text != selectedItem.Code)
+                {
+                    ShowWarning("Item does not exist.");
+                    return;
+                }
+
                 // Store item code before deletion
                 string itemCode = selectedItem.Code;
+
+                // Check if item is on any invoices BEFORE showing delete confirmation
+                if (itemsLogic.IsItemOnInvoice(selectedItem))
+                {
+                    // Get the invoice numbers
+                    List<int> invoiceNumbers = itemsLogic.GetInvoiceNumbersWithItem(selectedItem);
+
+                    // Create message with invoice numbers
+                    string invoiceList = string.Join(", ", invoiceNumbers);
+
+                    // Show error with specific invoice numbers (REQUIREMENT)
+                    ShowError($"Cannot delete item '{itemCode}'. It is used on the following invoice(s): {invoiceList}");
+                    return;
+                }
 
                 // Confirm deletion with MessageBox
                 MessageBoxResult result = MessageBox.Show(
@@ -285,7 +319,7 @@ namespace GroupProject.Items
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Delete from database (will throw exception if item is on invoice)
+                    // Delete from database
                     itemsLogic.DeleteItem(selectedItem);
 
                     // Set flag that items have changed
@@ -300,7 +334,7 @@ namespace GroupProject.Items
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message);
+                ShowError("Error deleting item: " + ex.Message);
             }
         }
 

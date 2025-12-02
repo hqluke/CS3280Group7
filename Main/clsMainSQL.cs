@@ -79,19 +79,6 @@ namespace GroupProject.Main
         /// SQL: SELECT ItemCode, ItemDesc, Cost FROM ItemDesc
         /// </summary>
         /// <returns>DataSet containing all items</returns>
-        public DataSet GetAllItems()
-        {
-            string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
-            int rowCount = 0;
-            return db.ExecuteSQLStatement(sSQL, ref rowCount);
-        }
-
-
-        /// <summary>
-        /// Retrieves all items from the ItemDesc table.
-        /// SQL: SELECT ItemCode, ItemDesc, Cost FROM ItemDesc
-        /// </summary>
-        /// <returns>DataSet containing all items</returns>
         public DataSet GetAllInvoiceNumbers()
         {
             string sSQL = "SELECT InvoiceNum FROM Invoices";
@@ -99,17 +86,19 @@ namespace GroupProject.Main
             return db.ExecuteSQLStatement(sSQL, ref rowCount);
         }
 
-        public int GetHighestInvoiceNum()
-        {
-            string sSQL = "SELECT MAX(InvoiceNum) FROM Invoices";
-            string result = db.ExecuteScalarSQL(sSQL);
-            return Convert.ToInt32(result) + 1;
-        }
-
+        /// <summary>
+        /// Gets the price of a new item based on its code. Returns -1.0 if item not found.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public double GetNewItemPrice(string code)
         {
             string sSQL = $"SELECT Cost FROM ItemDesc WHERE ItemCode = '{code}'";
             string result = db.ExecuteScalarSQL(sSQL);
+            if(result == "")
+            {
+                return -1.0;
+            }
             return Convert.ToDouble(result);
         }
 
@@ -159,29 +148,6 @@ namespace GroupProject.Main
                 return 1;
 
             return Convert.ToInt32(result) + 1;
-        }
-
-        /// <summary>
-        /// Deletes an entire invoice from the database.
-        /// </summary>
-        public void DeleteInvoice(int invoiceNum)
-        {
-            // First delete all line items
-            DeleteLineItemsForInvoice(invoiceNum);
-
-            // Then delete the invoice
-            string sSQL = $"DELETE FROM Invoices WHERE InvoiceNum = {invoiceNum}";
-            db.ExecuteNonQuery(sSQL);
-        }
-
-        /// <summary>
-        /// Updates an invoice's date, converting DateOnly to DateTime.
-        /// </summary>
-        public void UpdateInvoiceDate(int invoiceNum, DateOnly newDate)
-        {
-            DateTime dateTime = newDate.ToDateTime(TimeOnly.MinValue);
-            string sSQL = $"UPDATE Invoices SET InvoiceDate = #{dateTime.ToShortDateString()}# WHERE InvoiceNum = {invoiceNum}";
-            db.ExecuteNonQuery(sSQL);
         }
     }
 }

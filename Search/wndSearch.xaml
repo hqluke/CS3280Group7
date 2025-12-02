@@ -35,7 +35,13 @@
         </StackPanel>
         <StackPanel Name="splInvoiceTotalCost" Grid.Column="4" Margin="8,0,0,0">
             <Label Name="lblInvoiceTotalCost">Total Cost</Label>
-            <ComboBox Name="cbxInvoiceTotalCost" Grid.Column="3" SelectionChanged="cbxInvoiceTotalCost_SelectionChanged"></ComboBox>
+            <ComboBox Name="cbxInvoiceTotalCost" SelectionChanged="cbxInvoiceTotalCost_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat=C}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <DataGrid x:Name="dgdInvoices" Grid.Column="0" Grid.ColumnSpan="5"
                   Grid.Row="1" HeadersVisibility="Column" Margin="0,8,0,0"
@@ -48,7 +54,7 @@
                 <DataGridTextColumn Header="Date"
                     Binding="{Binding InvoiceDate}" Width="*"/>
                 <DataGridTextColumn Header="Total Cost"
-                    Binding="{Binding TotalCost}" Width="*"/>
+                    Binding="{Binding TotalCost, StringFormat=C}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="btnSelect" Grid.Column="3" Grid.Row="2" Margin="8"

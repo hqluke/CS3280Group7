@@ -34,7 +34,7 @@ namespace GroupProject.Main
         /// </summary>
         private Dictionary<int, clsItem> currentLineItems = new Dictionary<int, clsItem>();
         /// <summary>
-        /// Used to assign temporary negative line item numbers for new items added to the invoice
+        /// Used to assign temporary large line item numbers for new items added to the invoice
         /// </summary>
         private int tempLineItemCounter;
         /// <summary>
@@ -73,13 +73,14 @@ namespace GroupProject.Main
                         string description = row["ItemDesc"].ToString();
                         double cost = Convert.ToDouble(row["Cost"]);
                         int lineItemNum = Convert.ToInt32(row["LineItemNum"]);
-
+                        tempLineItemCounter++;
                         clsItem item = new clsItem(code, description, cost);
                         items.Add(item);
 
                         originalLineItems[lineItemNum] = item;
                         currentLineItems[lineItemNum] = item;
                     }
+                    tempLineItemCounter++;
                 }
                 return items;
             }
@@ -212,9 +213,9 @@ namespace GroupProject.Main
         {
             try
             {
-                // Use negative keys for new items
-                tempLineItemCounter--;
-                currentLineItems[tempLineItemCounter] = item;
+                // Use large numbers keys for new items
+                tempLineItemCounter++;
+                currentLineItems[10000 + tempLineItemCounter] = item;
             }
             catch (Exception ex)
             {
@@ -279,7 +280,10 @@ namespace GroupProject.Main
         {
             try
             {
-                return currentLineItems.Values.ToList();
+                return currentLineItems
+                    .OrderBy(kvp => kvp.Key)
+                    .Select(kvp => kvp.Value)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -308,7 +312,8 @@ namespace GroupProject.Main
 
                 // Insert new items (those with negative keys are new)
                 var lineItemsToInsert = currentLineItems
-                    .Where(kvp => kvp.Key < 0)
+                    .Where(kvp => kvp.Key >= 10000)
+                    .OrderBy(kvp => kvp.Key)
                     .ToList();
 
                 foreach (var kvp in lineItemsToInsert)
@@ -391,12 +396,46 @@ namespace GroupProject.Main
                 foreach (var kvp in currentLineItems)
                 {
                     double updatedPrice = sqlMain.GetNewItemPrice(kvp.Value.Code);
+                    if (updatedPrice == -1.0)
+                    {
+                        RemoveAllItemsWithCode(kvp.Value);
+                        return;
+                    }
+
                     kvp.Value.Cost = updatedPrice;
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Error updating current items: " + ex.Message);
+            }
+        }
+
+
+        public bool RemoveAllItemsWithCode(clsItem item)
+        {
+            try
+            {
+                // Find all matching items by code
+                var keysToRemove = currentLineItems
+                    .Where(kvp => kvp.Value.Code == item.Code)
+                    .Select(kvp => kvp.Key)
+                    .ToList(); // ToList() to avoid modifying collection during enumeration
+
+                // Remove all matching items
+                if (keysToRemove.Any())
+                {
+                    foreach (var key in keysToRemove)
+                    {
+                        currentLineItems.Remove(key);
+                    }
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error removing item from invoice: " + ex.Message);
             }
         }
 
