@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Items
 {
+    /// <summary>
+    /// Contains all SQL statements for Items Window
+    /// </summary>
     class clsItemsSQL
     {
         /// <summary>

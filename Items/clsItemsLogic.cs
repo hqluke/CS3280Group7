@@ -151,5 +151,33 @@ namespace GroupProject.Items
                 throw new Exception("Error checking if item is on invoice: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Get list of invoice numbers containing specified item
+        /// </summary>
+        /// <param name="item">Item</param>
+        /// <returns>List of invoice numbers</returns>
+        public List<int> GetInvoiceNumbersWithItem(clsItem item)
+        {
+            List<int> invoiceNumbers = new List<int>();
+
+            try
+            {
+                string sSQL = sqlItems.SelectInvoicesWithItem(item.Code);
+                int iRows = 0;
+                DataSet ds = dataAccess.ExecuteSQLStatement(sSQL, ref iRows);
+
+                for (int i = 0; i < iRows; i++)
+                {
+                    invoiceNumbers.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["InvoiceNum"]));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting invoice numbers: " + ex.Message);
+            }
+
+            return invoiceNumbers;
+        }
     }
 }
