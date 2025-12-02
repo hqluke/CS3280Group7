@@ -6,37 +6,157 @@
         xmlns:local="clr-namespace:GroupProject.Main"
         mc:Ignorable="d"
         Title="Main Window" Height="450" Width="800">
-    <Canvas>
-        <Menu Height="33" Width="159" HorizontalAlignment="Left" VerticalAlignment="Center">
+
+    <Grid Style="{StaticResource DarkGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Height="33" Width="159" HorizontalAlignment="Left" Background="#FF313131">
             <Button Content="Edit Items" Margin="0" Click="menuEditItemsClicked"/>
             <Button Content="Search" Margin="0" Click="menuSearchClicked"/>
         </Menu>
-        <Canvas>
-            <DataGrid AutoGenerateColumns="False" Height="304" Width="433" Name="dgInvoice" Canvas.Left="309" Canvas.Top="28" HorizontalAlignment="Center" VerticalAlignment="Top" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="70" Header="Item Code" Binding="{Binding Path = Code}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="240" Header="Description" Binding="{Binding Path = Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="125" Header="Cost" Binding="{Binding Path = Cost}"></DataGridTextColumn>
-                </DataGrid.Columns>
-                
-                
-            </DataGrid>
-        </Canvas>
-        <Label x:Name="labelInvoiceDate" Content="Invoice Date" Canvas.Left="61" Canvas.Top="71" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Label x:Name="labelInvoiceNumber" Content="Invoice Number" Canvas.Left="61" Canvas.Top="126" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Label x:Name="labelInvoiceTotalCost" Content="Total Cost:" Canvas.Left="68" Canvas.Top="174" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBoxItems" Canvas.Left="84" Canvas.Top="270" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="comboBoxItems_SelectionChanged"/>
-        <Label x:Name="labelItems" Content="Items:" Canvas.Left="26" Canvas.Top="268" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="labelItemCost" Content="Cost: " Canvas.Left="28" Canvas.Top="312" RenderTransformOrigin="0.202,-0.153" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="labelItemCostDisplay" Content="$" Canvas.Left="84" Canvas.Top="312" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="labelInvoiceTotalCostDisplay" Content="$" Canvas.Left="143" Canvas.Top="174" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Label x:Name="labelInvoiceNumberDisplay" Content="$" Canvas.Left="172" Canvas.Top="126" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Label x:Name="labelInvoiceDateDisplay" Content="$" Canvas.Left="172" Canvas.Top="71" RenderTransformOrigin="-0.368,0.117" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Button x:Name="buttonAddItem" Content="Add Item" Canvas.Left="31" Canvas.Top="356" Width="74" Click="buttonAddItem_Click"/>
-        <Button x:Name="buttonRemoveItem" Content="Remove Item" Canvas.Left="130" Canvas.Top="356" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="buttonRemoveItem_Click"/>
-        <Button x:Name="buttonEditInvoice" Content="Edit Invoice" Canvas.Left="308" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.432,0.202" Height="24" Click="buttonEditInvoice_Click"/>
-        <Button x:Name="buttonSaveInvoice" Content="Save Invoice" Canvas.Left="463" Canvas.Top="352" Width="82" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24"/>
-        <Button x:Name="buttonCreateNewInvoice" Content="Create New Invoice" Canvas.Left="608" Canvas.Top="352" HorizontalAlignment="Left" VerticalAlignment="Top" Width="133" RenderTransformOrigin="0.333,0.403" Height="24"/>
 
-    </Canvas>
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label x:Name="labelEditMode" Grid.Row="0" 
+                       Content="Edit Mode Enabled" 
+                       Foreground="White" 
+                       FontWeight="Bold" 
+                       FontSize="20" 
+                       Visibility="Hidden"
+                       Margin="0,0,0,0"/>
+
+                <Grid Grid.Row="1" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="labelInvoiceDate" Grid.Column="0" Content="Invoice Date:" />
+                    <Label x:Name="labelInvoiceDateDisplay" Grid.Column="1" Content="" />
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="labelInvoiceNumber" Grid.Column="0" Content="Invoice Number:" />
+                    <Label x:Name="labelInvoiceNumberDisplay" Grid.Column="1" Content="" />
+                </Grid>
+
+                <Grid Grid.Row="3" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="labelInvoiceTotalCost" Grid.Column="0" Content="Total Cost:" />
+                    <Label x:Name="labelInvoiceTotalCostDisplay" Grid.Column="1" Content="" />
+                </Grid>
+                
+                <Grid Grid.Row="5" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="labelItems" Grid.Column="0" Content="Items:" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="comboBoxItems" Grid.Column="1" 
+                              SelectionChanged="comboBoxItems_SelectionChanged"
+                              Margin="5,0,91,0"/>
+                </Grid>
+
+                <Grid Grid.Row="6" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="labelItemCost" Grid.Column="0" Content="Cost:" />
+                    <Label x:Name="labelItemCostDisplay" Grid.Column="1" Content="" />
+                </Grid>
+
+                <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                    <Button x:Name="buttonAddItem" Content="Add Item" Width="74" Click="buttonAddItem_Click" Margin="5,0,0,0" Height="20"/>
+                    <Button x:Name="buttonRemoveItem" Content="Remove Item" Width="90" Click="buttonRemoveItem_Click" Margin="20,0,0,0" Height="20"/>
+                </StackPanel>
+            </Grid>
+
+            <DataGrid Grid.Column="1" 
+                      x:Name="dgInvoice" 
+                      AutoGenerateColumns="False" 
+                      IsReadOnly="True" 
+                      SelectionChanged="dgInvoice_SelectionChanged" 
+                      ColumnWidth="*"
+                      Margin="20,0,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Item Code" Binding="{Binding Path=Code}"/>
+                    <DataGridTextColumn Width="2*" Header="Description" Binding="{Binding Path=Description}"/>
+                    <DataGridTextColumn Width="1.2*" Header="Cost" Binding="{Binding Path=Cost, StringFormat=C}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="10,0,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label x:Name="errorLabel" 
+                   Grid.Column="0"
+                   Grid.Row="1" 
+                   Content="Your are not currently editing an invoice" 
+                   Foreground="Red" 
+                   FontWeight="Bold" 
+                   Visibility="Hidden"
+                   HorizontalAlignment="Left"
+                   Margin="0,5,0,0"/>
+
+            <Grid Grid.Column="1" Grid.Row="0" Margin="20,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="buttonEditInvoice" 
+                        Content="Edit Invoice" 
+                        Width="82" 
+                        Height="24" 
+                        Click="buttonEditInvoice_Click" 
+                        IsEnabled="False"
+                        HorizontalAlignment="Left"/>
+                <Button x:Name="buttonSaveInvoice" 
+                        Content="Save Invoice" 
+                        Width="82" 
+                        Height="24" 
+                        Click="buttonSaveInvoice_Click" 
+                        IsEnabled="False"
+                        HorizontalAlignment="Left" Margin="165,0,0,0"/>
+                <Button x:Name="buttonCreateNewInvoice"
+                        Content="Create New Invoice" 
+                        Height="24" 
+                        Click="buttonCreateNewInvoice_Click" HorizontalAlignment="Left" Width="134" Margin="330,0,0,0"/>
+            </Grid>
+        </Grid>
+    </Grid>
 </Window>

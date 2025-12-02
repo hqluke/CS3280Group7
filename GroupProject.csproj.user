@@ -5,6 +5,9 @@
     <Compile Update="Items\wndItems.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Main\wndCreateInvoice.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Search\wndSearch.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

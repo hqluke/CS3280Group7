@@ -4,6 +4,58 @@
              xmlns:local="clr-namespace:GroupProject"
              StartupUri="Main/wndMain.xaml">
     <Application.Resources>
-         
+        <!-- Label style -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Canvas style -->
+        <Style TargetType="Canvas">
+            <Setter Property="Background" Value="#FF313131"/>
+        </Style>
+
+        <!-- Grid style -->
+        <Style x:Key="DarkGrid" TargetType="Grid">
+            <Setter Property="Background" Value="#FF313131"/>
+        </Style>
+
+        <!-- DataGrid style -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF313131"/>
+            <Setter Property="GridLinesVisibility" Value="All"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#FF555555"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#FF555555"/>
+            <Setter Property="RowBackground" Value="#FF3A3A3A"/>
+            <Setter Property="AlternatingRowBackground" Value="#FF444444"/>
+            <Setter Property="BorderBrush" Value="#FF5F5F5F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+
+        <!-- DataGrid column header style -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF3F3F3F"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- TextBox style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF3F3F3F"/>
+            <Setter Property="BorderBrush" Value="#FF5F5F5F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="SelectionBrush" Value="#FF505050"/>
+        </Style>
+
+        <!-- TextBlock style -->
+        <Style  x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF3F3F3F"/>
+        </Style>
+
     </Application.Resources>
 </Application>

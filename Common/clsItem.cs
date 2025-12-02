@@ -94,6 +94,8 @@ namespace GroupProject.Common
             } 
         }
 
+        public string Display { get { return Code + " - " + Description; } }
+
 
 
         /// <summary>

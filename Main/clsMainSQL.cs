@@ -21,7 +21,7 @@ namespace GroupProject.Main
         /// </summary>
         public void UpdateInvoiceTotalCost(int invoiceNum, double totalCost)
         {
-            string sSQL = $"UPDATE Invoices SET TotalCost = {totalCost} WHERE InvoiceNum = {invoiceNum}";
+            string sSQL = $"UPDATE Invoices SET TotalCost = {totalCost.ToString(System.Globalization.CultureInfo.InvariantCulture)} WHERE InvoiceNum = {invoiceNum}";
             db.ExecuteNonQuery(sSQL);
         }
 
@@ -86,16 +86,44 @@ namespace GroupProject.Main
             return db.ExecuteSQLStatement(sSQL, ref rowCount);
         }
 
+
+        /// <summary>
+        /// Retrieves all items from the ItemDesc table.
+        /// SQL: SELECT ItemCode, ItemDesc, Cost FROM ItemDesc
+        /// </summary>
+        /// <returns>DataSet containing all items</returns>
+        public DataSet GetAllInvoiceNumbers()
+        {
+            string sSQL = "SELECT InvoiceNum FROM Invoices";
+            int rowCount = 0;
+            return db.ExecuteSQLStatement(sSQL, ref rowCount);
+        }
+
+        public int GetHighestInvoiceNum()
+        {
+            string sSQL = "SELECT MAX(InvoiceNum) FROM Invoices";
+            string result = db.ExecuteScalarSQL(sSQL);
+            return Convert.ToInt32(result) + 1;
+        }
+
+        public double GetNewItemPrice(string code)
+        {
+            string sSQL = $"SELECT Cost FROM ItemDesc WHERE ItemCode = '{code}'";
+            string result = db.ExecuteScalarSQL(sSQL);
+            return Convert.ToDouble(result);
+        }
+
         /// <summary>
         /// Retrieves all line items for a specific invoice with their details.
         /// </summary>
         /// <returns>DataSet containing the line items with descriptions and costs</returns>
         public DataSet GetLineItemsForInvoice(int invoiceNum)
         {
-            string sSQL = $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost " +
+            string sSQL = $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum " +
                          $"FROM LineItems, ItemDesc " +
                          $"WHERE LineItems.ItemCode = ItemDesc.ItemCode " +
-                         $"AND LineItems.InvoiceNum = {invoiceNum}";
+                         $"AND LineItems.InvoiceNum = {invoiceNum} " +
+                         "ORDER BY LineItems.LineItemNum";
             int rowCount = 0;
             return db.ExecuteSQLStatement(sSQL, ref rowCount);
         }
