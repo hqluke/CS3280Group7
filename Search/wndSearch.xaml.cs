@@ -44,8 +44,12 @@ namespace GroupProject.Search
             {
                 InitializeComponent();
                 SearchLogic = new clsSearchLogic();
-                cbxInvoiceNumber.ItemsSource = SearchLogic.GetDistinctInvoiceNums();
-                cbxInvoiceDate.ItemsSource = SearchLogic.GetDistinctInvoiceDates();
+                cbxInvoiceNumber.ItemsSource =
+                    SearchLogic.GetDistinctInvoiceNums();
+
+                cbxInvoiceDate.ItemsSource =
+                    SearchLogic.GetDistinctInvoiceDates();
+
                 cbxInvoiceTotalCost.ItemsSource =
                     SearchLogic.GetDistinctTotalCost();
 
@@ -99,11 +103,8 @@ namespace GroupProject.Search
             }
             catch (Exception ex)
             {
-                throw new Exception(
-                    MethodInfo.GetCurrentMethod()!.DeclaringType!.Name + "." +
-                    MethodInfo.GetCurrentMethod()!.Name + " -> " +
-                    ex
-                );
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
         }
 
@@ -121,11 +122,104 @@ namespace GroupProject.Search
             }
             catch (Exception ex)
             {
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+        }
+
+        private void cbxInvoiceNumber_SelectionChanged(object sender,
+            SelectionChangedEventArgs e)
+        {
+            try
+            {
+                updateInvoices();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+        }
+
+        private void updateInvoices()
+        {
+            try
+            {
+                dgdInvoices.ItemsSource = SearchLogic.GetInvoices(
+                    (int?)cbxInvoiceNumber.SelectedItem,
+                    (DateOnly?)cbxInvoiceDate.SelectedItem,
+                    (double?)cbxInvoiceTotalCost.SelectedItem);
+            }
+            catch (Exception ex)
+            {
                 throw new Exception(
                     MethodInfo.GetCurrentMethod()!.DeclaringType!.Name + "." +
                     MethodInfo.GetCurrentMethod()!.Name + " -> " +
                     ex
                 );
+            }
+        }
+
+        /// <summary>
+        /// Handles top level exception errors by showing a message box or
+        /// writing to a file
+        /// </summary>
+        /// <param name="sClass"></param>
+        /// <param name="sMethod"></param>
+        /// <param name="sMessage"></param>
+        private void HandleError(string sClass, string sMethod, string sMessage)
+        {
+            try
+            {
+                MessageBox.Show(sClass + "." + sMethod + " -> " + sMessage);
+            }
+            catch (System.Exception ex)
+            {
+                System.IO.File.AppendAllText(@"C:\Error.txt",
+                    Environment.NewLine + "HandleError Exception: " +
+                    ex.Message);
+            }
+        }
+
+        private void cbxInvoiceDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                updateInvoices();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+        }
+
+        private void cbxInvoiceTotalCost_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                updateInvoices();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cbxInvoiceNumber.SelectedItem = null;
+                cbxInvoiceDate.SelectedItem = null;
+                cbxInvoiceTotalCost.SelectedItem = null;
+                dgdInvoices.ItemsSource = SearchLogic.GetInvoices();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()!.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
         }
     }
