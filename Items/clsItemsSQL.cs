@@ -70,5 +70,19 @@ namespace GroupProject.Items
             string sSQL = "DELETE FROM ItemDesc WHERE ItemCode = '" + sItemCode + "'";
             return sSQL;
         }
+
+        /// <summary>
+        /// Gets all line items with costs for specific invoice
+        /// </summary>
+        /// <param name="invoiceNum">Invoice number</param>
+        /// <returns>SQL statement</returns>
+        public string SelectLineItemsForInvoice(int invoiceNum)
+        {
+            string sSQL = "SELECT ItemCode, Cost " +
+                          "FROM LineItems L " +
+                          "INNER JOIN ItemDesc I ON L.ItemCode = I.ItemCode " +
+                          "WHERE InvoiceNum = " + invoiceNum;
+            return sSQL;
+        }
     }
 }

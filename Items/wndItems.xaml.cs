@@ -237,6 +237,14 @@ namespace GroupProject.Items
                     return;
                 }
 
+                // Validate invoices
+                string validationError = itemsLogic.ValidateEditWontBreakInvoices(selectedItem.Code, cost, selectedItem.Cost);
+                if (!string.IsNullOrEmpty(validationError))
+                {
+                    ShowError(validationError);
+                    return;
+                }
+
                 // Create updated item (code cannot be changed, only description and cost)
                 clsItem updatedItem = new clsItem(selectedItem.Code,
                                                  txtDescription.Text.Trim(),

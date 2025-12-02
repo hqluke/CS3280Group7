@@ -179,5 +179,61 @@ namespace GroupProject.Items
 
             return invoiceNumbers;
         }
+
+        /// <summary>
+        /// Validates edit function to prevent invoice totals from exceeding currency limit
+        /// </summary>
+        /// <param name="itemCode">Item code</param>
+        /// <param name="newCost">New cost</param>
+        /// <param name="oldCost">Old cost</param>
+        /// <returns>Error message if validation fails, empty string if OK</returns>
+        public string ValidateEditWontBreakInvoices(string itemCode, double newCost, double oldCost)
+        {
+            try
+            {
+                // If cost isn't changing much, skip validation
+                if (Math.Abs(newCost - oldCost) < 0.01)
+                    return "";
+
+                const double MAX_CURRENCY = 922337203685477.5807;
+
+                // Get invoices with item
+                string sSQL = sqlItems.SelectInvoicesWithItem(itemCode);
+                int iRows = 0;
+                DataSet ds = dataAccess.ExecuteSQLStatement(sSQL, ref iRows);
+
+                // For each invoice, calculate new total
+                for (int i = 0; i < iRows; i++)
+                {
+                    int invoiceNum = Convert.ToInt32(ds.Tables[0].Rows[i]["InvoiceNum"]);
+
+                    // Get line items for invoice
+                    string sSQL2 = sqlItems.SelectLineItemsForInvoice(invoiceNum);
+                    int iRows2 = 0;
+                    DataSet ds2 = dataAccess.ExecuteSQLStatement(sSQL2, ref iRows2);
+
+                    double total = 0;
+                    for (int j = 0; j < iRows2; j++)
+                    {
+                        string code = ds2.Tables[0].Rows[j]["ItemCode"].ToString();
+                        double cost = Convert.ToDouble(ds2.Tables[0].Rows[j]["Cost"]);
+
+                        // Use new cost if current item is being edited
+                        total += (code == itemCode) ? newCost : cost;
+                    }
+
+                    if (total > MAX_CURRENCY)
+                    {
+                        return $"Cannot update: Invoice #{invoiceNum} would exceed maximum total.";
+                    }
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error validating edit: " + ex.Message);
+            }
+        }
     }
 }
