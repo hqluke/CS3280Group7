@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GroupProject.Search"
         mc:Ignorable="d"
         Title="Search Invoices" Height="450" Width="800">
-    <Grid Name="grdMain" Margin="8">
+    <Grid Name="grdMain" Margin="8" Style="{StaticResource DarkGrid}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
