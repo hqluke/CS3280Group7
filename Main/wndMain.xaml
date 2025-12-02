@@ -125,6 +125,7 @@
 
             <Label x:Name="errorLabel" 
                    Grid.Column="0"
+                   Grid.ColumnSpan="2"
                    Grid.Row="1" 
                    Content="Your are not currently editing an invoice" 
                    Foreground="Red" 

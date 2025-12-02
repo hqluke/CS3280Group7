@@ -378,7 +378,7 @@ namespace GroupProject.Main
                 currentItem = (clsItem)comboBoxItems.SelectedItem;
                 if (currentItem != null)
                 {
-                    labelItemCostDisplay.Content = $"${currentItem.Cost.ToString("F2")}";
+                    labelItemCostDisplay.Content = $"{currentItem.Cost.ToString("C")}";
                 }
                 else
                 {
