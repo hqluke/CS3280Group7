@@ -24,12 +24,19 @@ namespace GroupProject.Items
         private clsDataAccess dataAccess;
 
         /// <summary>
-        /// Constructor
+        /// Constructor initializes the sql and data access
         /// </summary>
         public clsItemsLogic()
         {
-            sqlItems = new clsItemsSQL();
-            dataAccess = new clsDataAccess();
+            try
+            {
+                sqlItems = new clsItemsSQL();
+                dataAccess = new clsDataAccess();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error constructing items logic: " + ex.Message);
+            }
         }
 
         /// <summary>

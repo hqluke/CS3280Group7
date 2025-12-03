@@ -127,6 +127,12 @@ namespace GroupProject.Search
             }
         }
 
+        /// <summary>
+        /// Handles the invoice number selection change by updating the
+        /// list of invoices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbxInvoiceNumber_SelectionChanged(object sender,
             SelectionChangedEventArgs e)
         {
@@ -141,6 +147,12 @@ namespace GroupProject.Search
             }
         }
 
+        /// <summary>
+        /// Calls the business logic function to get an updated list of
+        /// invoices based on the form's arguments
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void updateInvoices()
         {
             try
@@ -181,6 +193,12 @@ namespace GroupProject.Search
             }
         }
 
+        /// <summary>
+        /// Handles the invoice date selection change by updating the
+        /// list of invoices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbxInvoiceDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -194,6 +212,12 @@ namespace GroupProject.Search
             }
         }
 
+        /// <summary>
+        /// Handles the invoice total cost selection change by updating the
+        /// list of invoices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbxInvoiceTotalCost_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -207,6 +231,12 @@ namespace GroupProject.Search
             }
         }
 
+        /// <summary>
+        /// Handles the clear button click event which clears the selected
+        /// items in each combo box and updates the invoice list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             try

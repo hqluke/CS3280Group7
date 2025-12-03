@@ -17,8 +17,16 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string SelectAllItems()
         {
-            string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc ORDER BY ItemCode";
-            return sSQL;
+            try
+            {
+
+                string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc ORDER BY ItemCode";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql select all items: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -28,8 +36,16 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string SelectInvoicesWithItem(string sItemCode)
         {
-            string sSQL = "SELECT DISTINCT(InvoiceNum) FROM LineItems WHERE ItemCode = '" + sItemCode + "'";
-            return sSQL;
+            try
+            {
+
+                string sSQL = "SELECT DISTINCT(InvoiceNum) FROM LineItems WHERE ItemCode = '" + sItemCode + "'";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql select invoices with item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -41,9 +57,16 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string UpdateItem(string sItemCode, string sItemDesc, string sCost)
         {
-            string sSQL = "UPDATE ItemDesc SET ItemDesc = '" + sItemDesc + "', Cost = " + sCost +
-                         " WHERE ItemCode = '" + sItemCode + "'";
-            return sSQL;
+            try
+            {
+                string sSQL = "UPDATE ItemDesc SET ItemDesc = '" + sItemDesc + "', Cost = " + sCost +
+                             " WHERE ItemCode = '" + sItemCode + "'";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql update item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -55,9 +78,16 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string InsertItem(string sItemCode, string sItemDesc, string sCost)
         {
-            string sSQL = "INSERT INTO ItemDesc (ItemCode, ItemDesc, Cost) VALUES ('" +
-                         sItemCode + "', '" + sItemDesc + "', " + sCost + ")";
-            return sSQL;
+            try
+            {
+                string sSQL = "INSERT INTO ItemDesc (ItemCode, ItemDesc, Cost) VALUES ('" +
+                             sItemCode + "', '" + sItemDesc + "', " + sCost + ")";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql insert item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -67,8 +97,15 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string DeleteItem(string sItemCode)
         {
-            string sSQL = "DELETE FROM ItemDesc WHERE ItemCode = '" + sItemCode + "'";
-            return sSQL;
+            try
+            {
+                string sSQL = "DELETE FROM ItemDesc WHERE ItemCode = '" + sItemCode + "'";
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql delete item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -78,11 +115,18 @@ namespace GroupProject.Items
         /// <returns>SQL statement</returns>
         public string SelectLineItemsForInvoice(int invoiceNum)
         {
-            string sSQL = "SELECT I.ItemCode, I.Cost " +
-                          "FROM ItemDesc I " +
-                          "INNER JOIN LineItems L ON L.ItemCode = I.ItemCode " +
-                          "WHERE L.InvoiceNum = " + invoiceNum;
-            return sSQL;
+            try
+            {
+                string sSQL = "SELECT I.ItemCode, I.Cost " +
+                              "FROM ItemDesc I " +
+                              "INNER JOIN LineItems L ON L.ItemCode = I.ItemCode " +
+                              "WHERE L.InvoiceNum = " + invoiceNum;
+                return sSQL;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting sql select line items: " + ex.Message);
+            }
         }
     }
 }

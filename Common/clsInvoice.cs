@@ -39,9 +39,17 @@ namespace GroupProject.Common
         /// <param name="Items"></param>
         public clsInvoice(int invoiceNumber, DateOnly invoiceDate, double totalCost)
         {
-            this.invoiceNumber = invoiceNumber;
-            this.invoiceDate = invoiceDate;
-            this.totalCost = totalCost;
+            try
+            {
+                this.invoiceNumber = invoiceNumber;
+                this.invoiceDate = invoiceDate;
+                this.totalCost = totalCost;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error constructing invoice: " + ex.Message);
+            }
+
         }
         /// <summary>
         /// Gets or sets the invoice number
@@ -51,10 +59,17 @@ namespace GroupProject.Common
                 return invoiceNumber; 
             }  
             set {
-                invoiceNumber = value; 
-                if (PropertyChanged != null)
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("InvoiceNumber"));
+                    invoiceNumber = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("InvoiceNumber"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting invoice number: " + ex.Message);
                 }
             } 
         }
@@ -67,10 +82,17 @@ namespace GroupProject.Common
                 return invoiceDate; 
             } 
             set {
-                invoiceDate = value; 
-                if (PropertyChanged != null)
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("InvoiceDate"));
+                    invoiceDate = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("InvoiceDate"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting invoice date: " + ex.Message);
                 }
             }
         }
@@ -82,11 +104,18 @@ namespace GroupProject.Common
             get { 
                 return totalCost; 
             } 
-            set { 
-                totalCost = value;
-                if (PropertyChanged != null)
+            set {
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("TotalCost"));
+                    totalCost = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("TotalCost"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting invoice total cost: " + ex.Message);
                 }
             } 
         }
@@ -102,7 +131,14 @@ namespace GroupProject.Common
         /// <param name="item"></param>
         public void AddItemToInvoice(clsItem item)
         {
-            itemsList.Add(item);
+            try
+            {
+                itemsList.Add(item);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error adding items to invoice: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -111,7 +147,14 @@ namespace GroupProject.Common
         /// <param name="item"></param>
         public void RemoveItemFromInvoice(clsItem item)
         {
-            itemsList.Remove(item);
+            try
+            {
+                itemsList.Remove(item);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error removing item from invoice: " + ex.Message);
+            }
         }
 
         /// <summary>

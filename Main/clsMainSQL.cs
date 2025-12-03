@@ -14,6 +14,9 @@ namespace GroupProject.Main
     /// </summary>
     class clsMainSQL
     {
+        /// <summary>
+        /// Member instance for database access
+        /// </summary>
         clsDataAccess db = new clsDataAccess();
 
         /// <summary>
@@ -21,8 +24,15 @@ namespace GroupProject.Main
         /// </summary>
         public void UpdateInvoiceTotalCost(int invoiceNum, double totalCost)
         {
-            string sSQL = $"UPDATE Invoices SET TotalCost = {totalCost.ToString(System.Globalization.CultureInfo.InvariantCulture)} WHERE InvoiceNum = {invoiceNum}";
-            db.ExecuteNonQuery(sSQL);
+            try
+            {
+                string sSQL = $"UPDATE Invoices SET TotalCost = {totalCost.ToString(System.Globalization.CultureInfo.InvariantCulture)} WHERE InvoiceNum = {invoiceNum}";
+                db.ExecuteNonQuery(sSQL);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error sql update invoice total cost: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -30,8 +40,15 @@ namespace GroupProject.Main
         /// </summary>
         public void InsertLineItem(int invoiceNum, int lineItemNum, string itemCode)
         {
-            string sSQL = $"INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
-            db.ExecuteNonQuery(sSQL);
+            try
+            {
+                string sSQL = $"INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
+                db.ExecuteNonQuery(sSQL);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error sql insert line item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -40,15 +57,22 @@ namespace GroupProject.Main
         /// </summary>
         public int InsertInvoice(DateOnly invoiceDate, double totalCost)
         {
-            // Convert DateOnly to DateTime for Access database
-            DateTime dateTime = invoiceDate.ToDateTime(TimeOnly.MinValue);
+            try
+            {
+                // Convert DateOnly to DateTime for Access database
+                DateTime dateTime = invoiceDate.ToDateTime(TimeOnly.MinValue);
 
-            string sSQL = $"INSERT INTO Invoices (InvoiceDate, TotalCost) VALUES (#{dateTime.ToShortDateString()}#, {totalCost})";
-            db.ExecuteNonQuery(sSQL);
+                string sSQL = $"INSERT INTO Invoices (InvoiceDate, TotalCost) VALUES (#{dateTime.ToShortDateString()}#, {totalCost})";
+                db.ExecuteNonQuery(sSQL);
 
-            sSQL = "SELECT MAX(InvoiceNum) FROM Invoices";
-            string result = db.ExecuteScalarSQL(sSQL);
-            return Convert.ToInt32(result);
+                sSQL = "SELECT MAX(InvoiceNum) FROM Invoices";
+                string result = db.ExecuteScalarSQL(sSQL);
+                return Convert.ToInt32(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error sql insert invoice: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -56,22 +80,29 @@ namespace GroupProject.Main
         /// </summary>
         public clsInvoice GetInvoiceByNumber(int invoiceNum)
         {
-            string sSQL = $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
-            int rowCount = 0;
-            DataSet ds = db.ExecuteSQLStatement(sSQL, ref rowCount);
-
-            if (rowCount > 0)
+            try
             {
-                DataRow row = ds.Tables[0].Rows[0];
-                int invNum = Convert.ToInt32(row["InvoiceNum"]);
-                DateTime dateTime = Convert.ToDateTime(row["InvoiceDate"]);
-                DateOnly invDate = DateOnly.FromDateTime(dateTime); // Convert DateTime to DateOnly
-                double total = Convert.ToDouble(row["TotalCost"]);
+                string sSQL = $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+                int rowCount = 0;
+                DataSet ds = db.ExecuteSQLStatement(sSQL, ref rowCount);
 
-                return new clsInvoice(invNum, invDate, total);
+                if (rowCount > 0)
+                {
+                    DataRow row = ds.Tables[0].Rows[0];
+                    int invNum = Convert.ToInt32(row["InvoiceNum"]);
+                    DateTime dateTime = Convert.ToDateTime(row["InvoiceDate"]);
+                    DateOnly invDate = DateOnly.FromDateTime(dateTime); // Convert DateTime to DateOnly
+                    double total = Convert.ToDouble(row["TotalCost"]);
+
+                    return new clsInvoice(invNum, invDate, total);
+                }
+
+                return null;
             }
-
-            return null;
+            catch (Exception ex)
+            {
+                throw new Exception("Error sql get invoice by number: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -81,9 +112,16 @@ namespace GroupProject.Main
         /// <returns>DataSet containing all items</returns>
         public DataSet GetAllInvoiceNumbers()
         {
-            string sSQL = "SELECT InvoiceNum FROM Invoices";
-            int rowCount = 0;
-            return db.ExecuteSQLStatement(sSQL, ref rowCount);
+            try
+            {
+                string sSQL = "SELECT InvoiceNum FROM Invoices";
+                int rowCount = 0;
+                return db.ExecuteSQLStatement(sSQL, ref rowCount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error sql get all invoice numbers: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -93,13 +131,20 @@ namespace GroupProject.Main
         /// <returns></returns>
         public double GetNewItemPrice(string code)
         {
-            string sSQL = $"SELECT Cost FROM ItemDesc WHERE ItemCode = '{code}'";
-            string result = db.ExecuteScalarSQL(sSQL);
-            if(result == "")
+            try
             {
-                return -1.0;
+                string sSQL = $"SELECT Cost FROM ItemDesc WHERE ItemCode = '{code}'";
+                string result = db.ExecuteScalarSQL(sSQL);
+                if (result == "")
+                {
+                    return -1.0;
+                }
+                return Convert.ToDouble(result);
             }
-            return Convert.ToDouble(result);
+            catch (Exception ex)
+            {
+                throw new Exception("Error get new item price: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -108,13 +153,20 @@ namespace GroupProject.Main
         /// <returns>DataSet containing the line items with descriptions and costs</returns>
         public DataSet GetLineItemsForInvoice(int invoiceNum)
         {
-            string sSQL = $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum " +
-                         $"FROM LineItems, ItemDesc " +
-                         $"WHERE LineItems.ItemCode = ItemDesc.ItemCode " +
-                         $"AND LineItems.InvoiceNum = {invoiceNum} " +
-                         "ORDER BY LineItems.LineItemNum";
-            int rowCount = 0;
-            return db.ExecuteSQLStatement(sSQL, ref rowCount);
+            try
+            {
+                string sSQL = $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum " +
+                             $"FROM LineItems, ItemDesc " +
+                             $"WHERE LineItems.ItemCode = ItemDesc.ItemCode " +
+                             $"AND LineItems.InvoiceNum = {invoiceNum} " +
+                             "ORDER BY LineItems.LineItemNum";
+                int rowCount = 0;
+                return db.ExecuteSQLStatement(sSQL, ref rowCount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error get line items for invoice: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -122,8 +174,15 @@ namespace GroupProject.Main
         /// </summary>
         public void DeleteLineItemsForInvoice(int invoiceNum)
         {
-            string sSQL = $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
-            db.ExecuteNonQuery(sSQL);
+            try
+            {
+                string sSQL = $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
+                db.ExecuteNonQuery(sSQL);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error delete line items for invoice: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -131,8 +190,15 @@ namespace GroupProject.Main
         /// </summary>
         public void DeleteLineItem(int invoiceNum, int lineItemNum)
         {
-            string sSQL = $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum} AND LineItemNum = {lineItemNum}";
-            db.ExecuteNonQuery(sSQL);
+            try
+            {
+                string sSQL = $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum} AND LineItemNum = {lineItemNum}";
+                db.ExecuteNonQuery(sSQL);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error delete line item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -140,14 +206,21 @@ namespace GroupProject.Main
         /// </summary>
         public int GetNextLineItemNumber(int invoiceNum)
         {
-            string sSQL = $"SELECT MAX(LineItemNum) FROM LineItems WHERE InvoiceNum = {invoiceNum}";
-            string result = db.ExecuteScalarSQL(sSQL);
+            try
+            {
+                string sSQL = $"SELECT MAX(LineItemNum) FROM LineItems WHERE InvoiceNum = {invoiceNum}";
+                string result = db.ExecuteScalarSQL(sSQL);
 
-            // If no line items exist, return 1; otherwise return max + 1
-            if (string.IsNullOrEmpty(result))
-                return 1;
+                // If no line items exist, return 1; otherwise return max + 1
+                if (string.IsNullOrEmpty(result))
+                    return 1;
 
-            return Convert.ToInt32(result) + 1;
+                return Convert.ToInt32(result) + 1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error get next line item number: " + ex.Message);
+            }
         }
     }
 }

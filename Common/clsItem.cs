@@ -34,18 +34,25 @@ namespace GroupProject.Common
         /// <param name="cost"></param>
         public clsItem(string code, string description, double cost)
         {
-            if(code.Length > 4)
+            try
             {
-                throw new ArgumentException("Item code cannot be longer than 4 characters.");
-            }
-            if(description.Length > 50)
-            {
-                throw new ArgumentException("Item description cannot be longer than 50 characters.");
-            }
+                if (code.Length > 4)
+                {
+                    throw new ArgumentException("Item code cannot be longer than 4 characters.");
+                }
+                if (description.Length > 50)
+                {
+                    throw new ArgumentException("Item description cannot be longer than 50 characters.");
+                }
 
-            this.code = code;
-            this.description = description;
-            this.cost = cost;
+                this.code = code;
+                this.description = description;
+                this.cost = cost;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error constructing item: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -56,10 +63,17 @@ namespace GroupProject.Common
                 return code; 
             } 
             set {
-                code = value; 
-                if (PropertyChanged != null)
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Code"));
+                    code = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("Code"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting item code: " + ex.Message);
                 }
             } 
         }
@@ -71,10 +85,17 @@ namespace GroupProject.Common
                 return description; 
             } 
             set {
-                description = value; 
-                if (PropertyChanged != null)
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Description"));
+                    description = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("Description"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting item desc: " + ex.Message);
                 }
             } 
         }
@@ -86,14 +107,24 @@ namespace GroupProject.Common
                 return cost; 
             } 
             set {
-                cost = value; 
-                if (PropertyChanged != null)
+                try
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Cost"));
+                    cost = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs("Cost"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error setting item cost: " + ex.Message);
                 }
             } 
         }
 
+        /// <summary>
+        /// Property displays the item code and description
+        /// </summary>
         public string Display { get { return Code + " - " + Description; } }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,10 +30,17 @@ namespace GroupProject.Main
         private bool hasValidationError = false;
         public wndCreateInvoice()
         {
-            InitializeComponent();
-            // Set DatePicker to today's date by default and attach validation error handler
-            dP.DateValidationError += DatePicker_DateValidationError;
-            dP.SelectedDate = DateTime.Today;
+            try
+            {
+                InitializeComponent();
+                // Set DatePicker to today's date by default and attach validation error handler
+                dP.DateValidationError += DatePicker_DateValidationError;
+                dP.SelectedDate = DateTime.Today;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error construct window create invoice: " + ex.Message);
+            }
         }
         /// <summary>
         /// Checks for validation errors in DatePicker
@@ -41,8 +49,21 @@ namespace GroupProject.Main
         /// <param name="e"></param>
         private void DatePicker_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
         {
-            hasValidationError = true;
-            errorLabelEmpty.Visibility = Visibility.Visible;
+            try
+            {
+                hasValidationError = true;
+                errorLabelEmpty.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error clear status: " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -76,8 +97,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error changing item seleciton from combo box " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error changing item seleciton from combo box " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -95,7 +122,34 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error cancelling create invoice window " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error cancelling create invoice window " + ex.Message);
+            //}
+        }
+
+        /// <summary>
+        /// Handles top level exception errors by showing a message box or
+        /// writing to a file
+        /// </summary>
+        /// <param name="sClass"></param>
+        /// <param name="sMethod"></param>
+        /// <param name="sMessage"></param>
+        private void HandleError(string sClass, string sMethod, string sMessage)
+        {
+            try
+            {
+                MessageBox.Show(sClass + "." + sMethod + " -> " + sMessage);
+            }
+            catch (System.Exception ex)
+            {
+                System.IO.File.AppendAllText(@"C:\Error.txt",
+                    Environment.NewLine + "HandleError Exception: " +
+                    ex.Message);
             }
         }
     }

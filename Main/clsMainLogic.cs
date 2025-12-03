@@ -43,10 +43,20 @@ namespace GroupProject.Main
         public InvoiceKey currentData;
         
 
+        /// <summary>
+        /// Constructs new main logic, initializing sql and data fields
+        /// </summary>
         public clsMainLogic()
         {
-            sqlMain = new clsMainSQL();
-            dataAccess = new clsDataAccess();
+            try
+            {
+                sqlMain = new clsMainSQL();
+                dataAccess = new clsDataAccess();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error construct main logic: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -88,8 +98,6 @@ namespace GroupProject.Main
             {
                 throw new Exception("Error getting invoice items: " + ex.Message);
             }
-
-            
         }
 
         /// <summary>
@@ -411,7 +419,12 @@ namespace GroupProject.Main
             }
         }
 
-
+        /// <summary>
+        /// Removes all items with the same item code as item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool RemoveAllItemsWithCode(clsItem item)
         {
             try
@@ -438,11 +451,6 @@ namespace GroupProject.Main
                 throw new Exception("Error removing item from invoice: " + ex.Message);
             }
         }
-
-
-
-
-
     }
 }
 

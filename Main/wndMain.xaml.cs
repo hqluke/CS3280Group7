@@ -3,6 +3,7 @@ using GroupProject.Items;
 using GroupProject.Search;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -63,10 +64,23 @@ namespace GroupProject.Main
 
         public wndMain()
         {
-            InitializeComponent();
-            itemsLogic = new clsItemsLogic();
-            mainLogic = new clsMainLogic();
-            start();
+            try
+            {
+                InitializeComponent();
+                itemsLogic = new clsItemsLogic();
+                mainLogic = new clsMainLogic();
+                start();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error constructing window main: " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -84,7 +98,6 @@ namespace GroupProject.Main
             {
                 throw new Exception("Error starting program " + ex.Message);
             }
-
         }
 
         /// <summary>
@@ -141,9 +154,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error opening search window or gathering all items " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
-
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error opening search window or gathering all items " + ex.Message);
+            //}
         }
 
         ///<summary>
@@ -181,8 +199,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error opening search window " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error opening search window " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -225,7 +249,6 @@ namespace GroupProject.Main
             {
                 throw new Exception("Error displaying invoice " + ex.Message);
             }
-
         }
         /// <summary>
         /// Handles adding an item to the current invoice but not to the db until saved.
@@ -282,8 +305,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error adding item " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error adding item " + ex.Message);
+            //}
 
         }
         /// <summary>
@@ -309,8 +338,14 @@ namespace GroupProject.Main
         /// </summary>
         private void HideAllErrors()
         {
-            errorLabel.Visibility = Visibility.Hidden;
-
+            try
+            {
+                errorLabel.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error hide all errors: " + ex.Message);
+            }
         }
         /// <summary>
         /// Removes an item from the current invoice but not from the db until saved
@@ -361,8 +396,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error removing item " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error removing item " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -388,8 +429,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error changing item seleciton from combo box " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error changing item seleciton from combo box " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -411,8 +458,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error trying to enter edit mode " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error trying to enter edit mode " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -459,8 +512,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error saving invoice " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error saving invoice " + ex.Message);
+            //}
         }
 
         /// <summary>
@@ -484,8 +543,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error opening create invoice window " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
             }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error opening create invoice window " + ex.Message);
+            //}
         }
 
         // Callback from the create invoice window when confirmed. User selected date is passed in.
@@ -513,6 +578,7 @@ namespace GroupProject.Main
 
             }
         }
+
         /// <summary>
         /// Updates the ComboBox selection when an item is selected in the data grid.
         /// </summary>
@@ -537,7 +603,34 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception("Error changing item seleciton from data grid " + ex.Message);
+                HandleError(MethodInfo.GetCurrentMethod()
+                    !.DeclaringType!.Name,
+                    MethodInfo.GetCurrentMethod()!.Name, ex.Message);
+            }
+            //catch (Exception ex)
+            //{
+            //    throw new Exception("Error changing item seleciton from data grid " + ex.Message);
+            //}
+        }
+
+        /// <summary>
+        /// Handles top level exception errors by showing a message box or
+        /// writing to a file
+        /// </summary>
+        /// <param name="sClass"></param>
+        /// <param name="sMethod"></param>
+        /// <param name="sMessage"></param>
+        private void HandleError(string sClass, string sMethod, string sMessage)
+        {
+            try
+            {
+                MessageBox.Show(sClass + "." + sMethod + " -> " + sMessage);
+            }
+            catch (System.Exception ex)
+            {
+                System.IO.File.AppendAllText(@"C:\Error.txt",
+                    Environment.NewLine + "HandleError Exception: " +
+                    ex.Message);
             }
         }
     }

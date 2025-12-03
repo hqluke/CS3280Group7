@@ -52,10 +52,17 @@ namespace GroupProject.Items
         /// </summary>
         public wndItems()
         {
-            InitializeComponent();
-            itemsLogic = new clsItemsLogic();
-            bHasItemsBeenChanged = false;
-            LoadItems();
+            try
+            {
+                InitializeComponent();
+                itemsLogic = new clsItemsLogic();
+                bHasItemsBeenChanged = false;
+                LoadItems();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error constructing items window: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -63,8 +70,15 @@ namespace GroupProject.Items
         /// </summary>
         private void ShowSuccess(string message)
         {
-            lblStatus.Text = message;
-            lblStatus.Foreground = System.Windows.Media.Brushes.Green;
+            try
+            {
+                lblStatus.Text = message;
+                lblStatus.Foreground = System.Windows.Media.Brushes.Green;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error show success: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -72,8 +86,15 @@ namespace GroupProject.Items
         /// </summary>
         private void ShowError(string message)
         {
-            lblStatus.Text = message;
-            lblStatus.Foreground = System.Windows.Media.Brushes.Red;
+            try
+            {
+                lblStatus.Text = message;
+                lblStatus.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error show error: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -81,8 +102,15 @@ namespace GroupProject.Items
         /// </summary>
         private void ShowWarning(string message)
         {
-            lblStatus.Text = message;
-            lblStatus.Foreground = System.Windows.Media.Brushes.Orange;
+            try
+            {
+                lblStatus.Text = message;
+                lblStatus.Foreground = System.Windows.Media.Brushes.Orange;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error show warning: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -90,7 +118,14 @@ namespace GroupProject.Items
         /// </summary>
         private void ClearStatus()
         {
-            lblStatus.Foreground = System.Windows.Media.Brushes.Black;
+            try
+            {
+                lblStatus.Foreground = System.Windows.Media.Brushes.Black;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error clear status: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -114,23 +149,30 @@ namespace GroupProject.Items
         /// </summary>
         private void dgItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dgItems.SelectedItem != null)
+            try
             {
-                selectedItem = (clsItem)dgItems.SelectedItem;
-                txtCode.Text = selectedItem.Code;
-                txtDescription.Text = selectedItem.Description;
-                txtCost.Text = selectedItem.Cost.ToString();
+                if (dgItems.SelectedItem != null)
+                {
+                    selectedItem = (clsItem)dgItems.SelectedItem;
+                    txtCode.Text = selectedItem.Code;
+                    txtDescription.Text = selectedItem.Description;
+                    txtCost.Text = selectedItem.Cost.ToString();
 
-                // Enable Edit and Delete buttons when item is selected
-                btnEdit.IsEnabled = true;
-                btnDelete.IsEnabled = true;
-                ClearStatus();
+                    // Enable Edit and Delete buttons when item is selected
+                    btnEdit.IsEnabled = true;
+                    btnDelete.IsEnabled = true;
+                    ClearStatus();
+                }
+                else
+                {
+                    ClearFields();
+                    btnEdit.IsEnabled = false;
+                    btnDelete.IsEnabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ClearFields();
-                btnEdit.IsEnabled = false;
-                btnDelete.IsEnabled = false;
+                ShowError("Error items selection change: " + ex.Message);
             }
         }
 
@@ -343,9 +385,16 @@ namespace GroupProject.Items
         /// </summary>
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            // Main Window will check HasItemsBeenChanged property after window closes
-            // If true, Main Window should refresh items combo box
-            this.Close();
+            try
+            {
+                // Main Window will check HasItemsBeenChanged property after window closes
+                // If true, Main Window should refresh items combo box
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                ShowError("Error close click: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -353,11 +402,18 @@ namespace GroupProject.Items
         /// </summary>
         private void ClearFields()
         {
-            txtCode.Text = "";
-            txtDescription.Text = "";
-            txtCost.Text = "";
-            selectedItem = null;
-            dgItems.SelectedItem = null;
+            try
+            {
+                txtCode.Text = "";
+                txtDescription.Text = "";
+                txtCost.Text = "";
+                selectedItem = null;
+                dgItems.SelectedItem = null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error clear fields: " + ex.Message);
+            }
         }
     }
 }
